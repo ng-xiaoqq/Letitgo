@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="echo">
+<head>
+    <meta charset="UTF-8">
+    <title>自定义orderBy</title>
+</head>
+<body ng-controller="allen">
+    <ul>
+        <li ng-repeat="item in arr|myOrderBy:'-' track by $index">{{item}}</li>
+    </ul>
+</body>
+<script src="js/angular.js"></script>
+<script>
+    var echo = angular.module("echo",[]);
+    var allen = echo.controller("allen",['$scope',function ($scope) {
+        $scope.arr = [1,2,3,4,5,6]
+    }])
+    echo.filter("myOrderBy",function () {
+        return function (collection, p1) {
+        //    要做一个过滤器，可以将数组正序或倒序排列
+        //    在这里写过滤器的过滤逻辑
+            var arr1 = [];
+            if (p1=="+"||p1==undefined){
+                arr1 = collection.sort();
+            }
+            else if (p1=="-") {
+                arr1 = collection.sort();
+                //翻转数组
+                arr1 = arr1.reverse()
+            }
+            return arr1;
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="echo">
+<head>
+    <meta charset="UTF-8">
+    <title>angular服务的初识</title>
+</head>
+<body ng-controller="allen">
+    <div ng-controller="myController"></div>
+</body>
+<script src="js/angular.js"></script>
+<script>
+    var echo = angular.module("echo",[]);
+    //第一个服务service
+    // 创建第一个服务
+    echo.service("myService",function () {
+    //    这个回调函数是用来编写服务的代码逻辑的
+        console.log("我是服务，已经被调用");
+    //    service这个服务的回调函数会被angular理解为一个构造函数，，最后当用户调用这个服务的时候，这个构造函数会被实例化，并将创建出来 的对象赋值给当前的服务对象
+        this.name = "孙外公";
+        this.age = 550;
+        this.sex = "公猴";
+        this.say = function () {
+            console.log("泼魔，睁眼看看，俺是你"+this.name);
+        }
+    })
+    //第二个服务 factory
+    echo.factory('mgFactory',function () {
+    //    在这个回调函数中我们也要直接返回一个数据，因为factory的服务的回调函数不会被
+        // angular理解为构造函数，因此需要手动返回，返回的数据可以是任意数据
+        return "我爱你echo，我不爱老王";
+    //    这个factory服务我们一般用来在整个angular代码中实现数据的存储和共享
+    })
+    //第三个服务  constant  简易化的服务，优点是可以更简洁的创建服务并返回数据，缺点是不能很灵活的设置返回数据相关的参数
+    echo.constant("myConstant",{name:"250"});
+    // 调用服务的方法：
+    //在主模块或控制器模块中引入(注入)服务以及服务依赖的数据，之后就可以在模块中使用该服务了
+    var allen = echo.controller("allen",['mgFactory','$scope','myService',function (myFactory,$scope,myService) {
+        console.log(myService);
+        myService.say();
+        window.service = myService;
+    //    打印第二个服务   这里由于没有写依赖注入，因此当前控制器中无法拿到myFactory这个服务
+        console.log(myFactory);
+        console.log(myConstant);
+    }])
+    echo.controller("myController",["$scope","myServuce",function ($scope,myService) {
+        console.log(window.service === myService);
+    }])
+</script>
+</html>

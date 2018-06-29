@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="echo">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body ng-controller="allen">
+    <div>
+        <a href="#/movie">电影</a>
+        <a href="#/music">音乐</a>
+        <a href="#/friend">好友</a>
+    </div>
+    <div ui-view></div>
+</body>
+<script src="js/angular.js"></script>
+<!--如果想要使用ui-router插件，要先引包-->
+<script src="js/angular-ui-router.js"></script>
+
+<script>
+    //插件的引入需要在主模块中进行，因此在主模块中引入了ui.router
+    var echo = angular.module("echo",["ui.router"]);
+    var allen = echo.controller("allen",["$scope",function ($scope) {
+
+    }]);
+    //在主模块中引入的插件之后，还选要在config配置模块中引入插件提供的服务 $stateProvider
+    //使用config方法声明配置路由模块
+    echo.config(["$stateProvider","$locationProvider",function ($stateProvider,$locationProvider) {
+        //解决锚点值解析出错的问题
+        $locationProvider.hashPrefix("");
+        $stateProvider.state("movie",{
+            url:"/movie",
+            template:"<h1>万万没想到</h1>"
+        })
+            .state("music",{
+                url:"/music",
+                template:"<strong>爆刘继芬</strong>"
+            })
+            .state("friend",{
+                url:"/friend",
+                template:"<strong>小明、小红、小绿</strong>"
+            })
+    }])
+</script>
+</html>
